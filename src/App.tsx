@@ -172,7 +172,10 @@ const routeTree = rootRoute.addChildren([
   widgetRoute,
 ])
 
-const router = createRouter({ routeTree })
+const router = createRouter({
+  routeTree,
+  basepath: import.meta.env.DEV ? '/' : '/tirelink/',
+})
 
 declare module '@tanstack/react-router' {
   interface Register {
