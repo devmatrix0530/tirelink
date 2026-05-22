@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { Search, MapPin, Shield, Clock, TrendingUp } from 'lucide-react';
 import { Button, Input, Container, Card, CardContent } from '@blinkdotnew/ui';
+import heroImage from '../assets/hero.png';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function Home() {
         {/* Background with Overlay */}
         <div className="absolute inset-0 z-0">
           <img 
-            src="/src/assets/hero.png" 
+            src={heroImage} 
             alt="Hero Background" 
             className="w-full h-full object-cover"
           />
