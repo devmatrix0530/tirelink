@@ -7,7 +7,7 @@ import { api } from '../lib/api';
 import { format, addDays } from 'date-fns';
 
 export default function BookingPage() {
-  const { id } = useParams({ from: '/booking/$id' as any });
+  const { id } = useParams({} as any);
   const navigate = useNavigate();
   const [step, setStep] = React.useState(1);
 

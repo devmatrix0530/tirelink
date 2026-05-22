@@ -18,7 +18,7 @@ export default function OwnerLayout() {
     if (!user) return
     fetch(`${API_BASE}/notifications`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('tirelink_token')}` }
-    }).then(r => r.json()).then(data => setNotifications(data)).catch(() => {})
+    }).then(r => r.json()).then(data => setNotifications(Array.isArray(data) ? data : [])).catch(() => {})
   }, [user])
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function OwnerLayout() {
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
-  const unreadCount = notifications.filter((n: any) => !n.read).length
+  const unreadCount = Array.isArray(notifications) ? notifications.filter((n: any) => !n.read).length : 0
 
   const markAsRead = async (id: string) => {
     await fetch(`${API_BASE}/notifications/${id}/read`, {

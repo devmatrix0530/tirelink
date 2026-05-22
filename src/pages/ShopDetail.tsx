@@ -7,7 +7,7 @@ import { api, API_BASE } from '../lib/api';
 import { format } from 'date-fns';
 
 export default function ShopDetail() {
-  const { id } = useParams({ from: '/shop/$id' as any });
+  const { id } = useParams({} as any);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [reviewAuthor, setReviewAuthor] = useState('');

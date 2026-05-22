@@ -22,20 +22,10 @@ export default function AdminLayout() {
   useEffect(() => {
     fetch(`${API_BASE}/notifications`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('tirelink_token')}` }
-    }).then(r => r.json()).then(data => setNotifications(data)).catch(() => {})
+    }).then(r => r.json()).then(data => setNotifications(Array.isArray(data) ? data : [])).catch(() => {})
   }, [])
 
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      if (bellRef.current && !bellRef.current.contains(e.target as Node)) {
-        setShowNotifications(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [])
-
-  const unreadCount = notifications.filter((n: any) => !n.read).length
+  const unreadCount = Array.isArray(notifications) ? notifications.filter((n: any) => !n.read).length : 0
 
   return (
     <div className="flex h-screen">

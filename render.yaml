@@ -12,7 +12,7 @@ services:
       - key: NODE_VERSION
         value: 22
       - key: DATABASE_URL
-        value: file:./dev.db
+        value: postgresql://tirelink_db_user:U3oI7O3RAPffvJRL1tt6V7Bb3RpiKTc5@dpg-d887fb57vvec73cr9g70-a/tirelink_db
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
