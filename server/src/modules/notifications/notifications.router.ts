@@ -4,6 +4,27 @@ import { requireAuth, AuthRequest } from '../../common/middleware'
 
 export const notificationsRouter = Router()
 
+notificationsRouter.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
+  try {
+    const user = req.user
+    let where: any = {}
+
+    if (user?.role === 'owner') {
+      const shop = await prisma.shop.findUnique({ where: { userId: user.id } })
+      if (shop) where.shopId = shop.id
+    }
+
+    const notifications = await prisma.notification.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: 50
+    })
+    res.json(notifications)
+  } catch {
+    res.status(500).json({ error: 'Failed to fetch notifications' })
+  }
+})
+
 notificationsRouter.post('/booking-confirmed', async (req: Request, res: Response) => {
   try {
     const { bookingId } = req.body
