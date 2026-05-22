@@ -43,7 +43,7 @@ app.use('/api/reviews', reviewsRouter)
 app.use('/api/analytics', analyticsRouter)
 
 // Seed endpoint (development convenience)
-app.post('/api/seed', async (_req, res) => {
+app.all('/api/seed', async (_req, res) => {
   try {
     const { PrismaClient } = await import('@prisma/client')
     const seedPrisma = new PrismaClient()
