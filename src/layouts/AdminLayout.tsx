@@ -4,6 +4,7 @@ import { Button, Badge } from '@blinkdotnew/ui'
 import { Store, Users, LayoutDashboard, LogOut, Shield, Bell } from 'lucide-react'
 import { cn } from '../lib/utils'
 import { format } from 'date-fns'
+import { API_BASE } from '../lib/api'
 
 const NAV_ITEMS = [
   { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
@@ -19,7 +20,7 @@ export default function AdminLayout() {
   const bellRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/notifications', {
+    fetch(`${API_BASE}/notifications`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('tirelink_token')}` }
     }).then(r => r.json()).then(data => setNotifications(data)).catch(() => {})
   }, [])

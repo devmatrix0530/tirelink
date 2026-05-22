@@ -4,6 +4,7 @@ import { AppShell, AppShellSidebar, AppShellMain, MobileSidebarTrigger, SidebarI
 import { LayoutDashboard, Calendar, ClipboardList, Settings, LogOut, Car, Bell, BarChart3, X, CheckCircle2, AlertCircle, Info } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { format } from 'date-fns'
+import { API_BASE } from '../lib/api'
 
 export default function OwnerLayout() {
   const { user, logout } = useAuth()
@@ -15,7 +16,7 @@ export default function OwnerLayout() {
 
   useEffect(() => {
     if (!user) return
-    fetch('http://localhost:4000/api/notifications', {
+    fetch(`${API_BASE}/notifications`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('tirelink_token')}` }
     }).then(r => r.json()).then(data => setNotifications(data)).catch(() => {})
   }, [user])
@@ -33,7 +34,7 @@ export default function OwnerLayout() {
   const unreadCount = notifications.filter((n: any) => !n.read).length
 
   const markAsRead = async (id: string) => {
-    await fetch(`http://localhost:4000/api/notifications/${id}/read`, {
+    await fetch(`${API_BASE}/notifications/${id}/read`, {
       method: 'PATCH',
       headers: { Authorization: `Bearer ${localStorage.getItem('tirelink_token')}` }
     })

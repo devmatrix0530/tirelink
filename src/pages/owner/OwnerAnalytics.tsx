@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Card, CardHeader, CardTitle, CardContent, StatGroup, Stat, Badge, EmptyState } from '@blinkdotnew/ui'
 import { TrendingUp, CalendarCheck, XCircle, Star, DollarSign, BarChart3, Activity, ArrowUp, ArrowDown } from 'lucide-react'
-import { api } from '../../lib/api'
+import { api, API_BASE } from '../../lib/api'
 import { useAuth } from '../../hooks/useAuth'
 
 export default function OwnerAnalytics() {
@@ -15,7 +15,7 @@ export default function OwnerAnalytics() {
 
   const { data: analytics, isLoading } = useQuery({
     queryKey: ['analytics', shop?.id],
-    queryFn: () => fetch(`http://localhost:4000/api/analytics/shop/${shop.id}`, {
+    queryFn: () => fetch(`${API_BASE}/analytics/shop/${shop.id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('tirelink_token')}` }
     }).then(r => r.json()),
     enabled: !!shop,

@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams, useNavigate } from '@tanstack/react-router';
 import { Star, MapPin, Clock, ChevronLeft, Info, CircleDollarSign, Car, CheckCircle2, MessageSquare, Send } from 'lucide-react';
 import { Button, Container, Card, CardContent, Badge, Skeleton, Tabs, TabsList, TabsTrigger, TabsContent, Input, toast } from '@blinkdotnew/ui';
-import { api } from '../lib/api';
+import { api, API_BASE } from '../lib/api';
 import { format } from 'date-fns';
 
 export default function ShopDetail() {
@@ -26,11 +26,11 @@ export default function ShopDetail() {
 
   const { data: reviews = [] } = useQuery({
     queryKey: ['reviews', id],
-    queryFn: () => fetch(`http://localhost:4000/api/reviews/shop/${id}`).then(r => r.json()),
+    queryFn: () => fetch(`${API_BASE}/reviews/shop/${id}`).then(r => r.json()),
   });
 
   const reviewMutation = useMutation({
-    mutationFn: (data: any) => fetch('http://localhost:4000/api/reviews', {
+    mutationFn: (data: any) => fetch(`${API_BASE}/reviews`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
     }).then(r => r.json()),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['reviews', id] }); queryClient.invalidateQueries({ queryKey: ['shop', id] }); toast.success('Review submitted!'); setReviewContent(''); },
