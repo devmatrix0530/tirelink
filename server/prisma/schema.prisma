@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  phoneNumber  String?  @unique
+  email        String?  @unique
+  passwordHash String?
+  name         String?
+  role         String   @default("customer")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  shop         Shop?
+  seller       Seller?
+}
+
+model PhoneVerification {
+  id          String   @id @default(uuid())
+  phoneNumber String
+  code        String
+  verified    Boolean  @default(false)
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
+  user        String?
+}
+
+model Shop {
+  id           String   @id @default(uuid())
+  name         String
+  address      String
+  latitude     Float
+  longitude    Float
+  liftCount    Int      @default(2)
+  openingHours String   @default("09:00 - 18:00")
+  rating       Float    @default(0)
+  imageUrl     String   @default("")
+  active       Boolean  @default(false)
+  description  String   @default("")
+  phone        String   @default("")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  userId       String?  @unique
+  user         User?    @relation(fields: [userId], references: [id])
+  services     Service[]
+  bookings     Booking[]
+  reviews      Review[]
+}
+
+model Service {
+  id       String @id @default(uuid())
+  shopId   String
+  category String
+  inch     Int
+  price    Int
+
+  shop     Shop   @relation(fields: [shopId], references: [id])
+
+  @@unique([shopId, category, inch])
+}
+
+model Booking {
+  id            String   @id @default(uuid())
+  shopId        String
+  userId        String?
+  vehicleNumber String
+  phoneNumber   String
+  category      String?
+  inch          Int?
+  bookingDate   DateTime
+  status        String   @default("pending")
+  referenceId   String   @unique @default(uuid())
+  kakaoSent     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  shop          Shop     @relation(fields: [shopId], references: [id])
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  shopId    String
+  author    String
+  rating    Int      @default(5)
+  content   String
+  createdAt DateTime @default(now())
+
+  shop      Shop     @relation(fields: [shopId], references: [id])
+}
+
+model Seller {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  name          String
+  email         String
+  storeUrl      String
+  status        String   @default("pending")
+  billingStatus String   @default("cancelled")
+  billingKey    String?
+  widgetCode    String?  @unique
+  joinedAt      DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User     @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  shopId    String
+  type      String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
