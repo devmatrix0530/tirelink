@@ -60,11 +60,11 @@ export default function OwnerLayout() {
             <Badge variant="secondary" className="text-[9px] uppercase font-bold tracking-widest px-1">Shop</Badge>
           </div>
           <div className="flex-1 min-h-0 overflow-y-auto px-2 py-4 space-y-1">
-            <SidebarItem icon={<LayoutDashboard size={18} />} label="Dashboard" href="/owner/dashboard" active={location.pathname === '/owner/dashboard'} />
-            <SidebarItem icon={<Calendar size={18} />} label="Schedule" href="/owner/calendar" active={location.pathname === '/owner/calendar'} />
-            <SidebarItem icon={<ClipboardList size={18} />} label="Settlements" href="/owner/settlements" active={location.pathname === '/owner/settlements'} />
-            <SidebarItem icon={<BarChart3 size={18} />} label="Analytics" href="/owner/analytics" active={location.pathname === '/owner/analytics'} />
-            <SidebarItem icon={<Settings size={18} />} label="Shop Settings" href="/owner/settings" active={location.pathname === '/owner/settings'} />
+            <SidebarItem icon={<LayoutDashboard size={18} />} label="Dashboard" active={location.pathname === '/owner/dashboard'} onClick={() => navigate({ to: '/owner/dashboard' })} />
+            <SidebarItem icon={<Calendar size={18} />} label="Schedule" active={location.pathname === '/owner/calendar'} onClick={() => navigate({ to: '/owner/calendar' })} />
+            <SidebarItem icon={<ClipboardList size={18} />} label="Settlements" active={location.pathname === '/owner/settlements'} onClick={() => navigate({ to: '/owner/settlements' })} />
+            <SidebarItem icon={<BarChart3 size={18} />} label="Analytics" active={location.pathname === '/owner/analytics'} onClick={() => navigate({ to: '/owner/analytics' })} />
+            <SidebarItem icon={<Settings size={18} />} label="Shop Settings" active={location.pathname === '/owner/settings'} onClick={() => navigate({ to: '/owner/settings' })} />
           </div>
           <div className="shrink-0 border-t border-border p-4 bg-muted/30">
             <Persona name={user?.name || 'Shop Owner'} subtitle="Partner Admin" className="mb-4" />
