@@ -42,6 +42,34 @@ app.use('/api/notifications', notificationsRouter)
 app.use('/api/reviews', reviewsRouter)
 app.use('/api/analytics', analyticsRouter)
 
+// Seed endpoint (development convenience)
+app.post('/api/seed', async (_req, res) => {
+  try {
+    const { PrismaClient } = await import('@prisma/client')
+    const seedPrisma = new PrismaClient()
+    const existing = await seedPrisma.shop.count()
+    if (existing > 0) {
+      await seedPrisma.$disconnect()
+      return res.json({ message: 'Already seeded', count: existing })
+    }
+    const s1 = await seedPrisma.shop.create({ data: { name: 'Speed Tire Center', address: '123 Gangnam-daero, Seoul', latitude: 37.5, longitude: 127.0, liftCount: 4, openingHours: '09:00 - 18:00', rating: 4.5, imageUrl: 'https://images.unsplash.com/photo-1580674285054-bed31eacf5f4?w=800', active: true } })
+    const s2 = await seedPrisma.shop.create({ data: { name: 'Pro Auto Service', address: '456 Teheran-ro, Seoul', latitude: 37.51, longitude: 127.02, liftCount: 2, openingHours: '08:00 - 20:00', rating: 4.2, imageUrl: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=800', active: true } })
+    const s3 = await seedPrisma.shop.create({ data: { name: 'Premium Tire & Wheel', address: '789 Yangjae-daero, Seoul', latitude: 37.48, longitude: 127.05, liftCount: 6, openingHours: '09:30 - 19:00', rating: 4.8, imageUrl: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=800', active: true } })
+    const domesticInches = [13,14,15,16,17,18,19,20]
+    const importInches = [15,16,17,18,19,20,21,22]
+    const services: any[] = []
+    for (const shop of [s1, s2, s3]) {
+      for (const inch of domesticInches) services.push({ shopId: shop.id, category: 'domestic', inch, price: 20000 + inch * 1000 })
+      for (const inch of importInches) services.push({ shopId: shop.id, category: 'import', inch, price: 30000 + inch * 1500 })
+    }
+    await seedPrisma.service.createMany({ data: services })
+    await seedPrisma.$disconnect()
+    res.json({ message: 'Seed completed', shops: 3, services: services.length })
+  } catch (e: any) {
+    res.status(500).json({ error: e.message })
+  }
+})
+
 app.use(errorHandler)
 
 app.listen(PORT, () => {
